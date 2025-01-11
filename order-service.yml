@@ -34,3 +34,9 @@ resilience4j:
           - feign.FeignException
 
 
+resilience4j:
+  circuitbreaker:
+    instances:
+      productService:
+        slidingWindowType: TIME_BASED
+        minimumNumberOfCalls: 3
