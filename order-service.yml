@@ -10,6 +10,14 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/ # URL of the Eureka server that this service will register with
 
+feign:
+  client:
+    config:
+      default:
+        maxAttempts: 3              # Number of retry attempts
+        readTimeout: 5000           # Timeout for reading responses
+        connectTimeout: 3000       # Timeout for establishing a connection
+
 
 resilience4j:
   circuitbreaker:
@@ -29,3 +37,9 @@ management:
     web:
       exposure:
         include: resilience4j-circuitbreakers, health, metrics
+
+logging:
+  level:
+    feign: DEBUG
+    '[io.github.resilience4j]': DEBUG
+
