@@ -13,13 +13,19 @@ eureka:
 
 resilience4j:
   circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10  # Number of calls in a window
+        slidingWindowType: COUNT_BASED
+        failureRateThreshold: 50  # Circuit opens when 50% calls fail
+        waitDurationInOpenState: 10s  # Time before retry after circuit opens
+        permittedNumberOfCallsInHalfOpenState: 3  # Test calls before fully closing
     instances:
       productService:
-        slidingWindowType: TIME_BASED
-        minimumNumberOfCalls: 3
-        slidingWindowSize: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-        recordExceptions:
-          - feign.RetryableException
-          - feign.FeignException
+        base-config: default
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: resilience4j*, health
