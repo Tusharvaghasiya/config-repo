@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: order-service
+
+server:
+  port: 8081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+    instances:
+      productService:
+        base-config: default
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: resilience4j-circuitbreakers,health,metrics
+
+logging:
+  level:
+    feign: DEBUG
+    "[io.github.resilience4j]": DEBUG
